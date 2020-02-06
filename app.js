@@ -1,12 +1,11 @@
 const express = require('express');
 const app = express();
-const PORT = 3000
 
 app.use(express.json())
 
 let songs = [
-  { id: 1, name: "Some Song", artist: "Some Artist" },
-  { id: 2, name: "Rather Be", artist: "Clean Bandit" }
+  // { id: 1, name: "Numb", artist: "Linkin Park" },
+  // { id: 2, name: "Rather Be", artist: "Clean Bandit" }
 ];
 
 //return list of all songs
@@ -18,11 +17,11 @@ app.get('/songs', (req, res) => {
 app.post('/songs', (req, res) => {
   let newSong = {
     id: songs.length + 1,
-    song: req.body.name,
+    name: req.body.name,
     artist: req.body.artist
   };
   songs.push(newSong)
-  res.status(200).json(newSong)
+  res.status(201).json(newSong)
 });
 
 //return a song with id 
@@ -47,5 +46,4 @@ app.delete('/songs/:id', (req, res) => {
   res.status(200).json(deleteSong)
 })
 
-app.listen(PORT);
-console.log(`Server listening on port ${PORT}`);
+module.exports = app
