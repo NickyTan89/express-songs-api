@@ -9,13 +9,8 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "express": "~4.16.0"
-<<<<<<< HEAD
-  },
-  "devDependencies": {
-    "jest": "^23.6.0",
-    "supertest": "^3.3.0"
-=======
->>>>>>> 577f82b002854cfd9764b806104d7961d59ef93b
+    "express": "~4.16.0",
+    "jest": "^25.1.0",
+    "supertest": "^4.0.2"
   }
 }
