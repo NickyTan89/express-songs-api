@@ -11,7 +11,7 @@ let songs = [
 router.param('id', (req, res, next, id) => {
   let song = songs.find(song => song.id === parseInt(req.params.id));
   if (!song) {
-    const error = new Error("Impossible. Perhaps the archives are incomplete.")
+    const error = new Error(`Could not find song with ID: ${id}`);
     return next(error);
   };
     req.song = song;
@@ -65,7 +65,7 @@ router.delete('/:id', (req, res) => {
 
 //create placeholder error
 router.use((err, req, res, next) => {
-  res.status(404).send(err.message);
+  res.status(404).json({Error: err.message});
 });
 
 module.exports = router;

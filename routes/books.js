@@ -3,15 +3,15 @@ const router = express.Router();
 //express router
 
 let books = [
-  // { id: 1, title: "some book 1", writer: "some writer 1" },
-  // { id: 2, title: "some book 2", writer: "some writer 2" }
+  // { id: 1, title: "some book 1", author: "some writer 1" },
+  // { id: 2, title: "some book 2", author: "some writer 2" }
 ];
 
 //integrate middleware
 router.param('id', (req, res, next, id) => {
   let book = books.find(book => book.id === parseInt(req.params.id));
   if (!book) {
-    const error = new Error("Impossible. Perhaps the archives are incomplete.")
+    const error = new Error(`Could not find book with ID: ${id}`)
     return next(error);
   };
     req.book = book;
@@ -34,10 +34,10 @@ router.post('/', (req, res) => {
   let newBook = {
     id: books.length + 1,
     title: req.body.title,
-    writer: req.body.writer
+    author: req.body.author
   };
   if (!newBook) {
-    const error = new Error("Unable to post the new song to the archives. Please try again.")
+    const error = new Error("Unable to post the new book to the archives. Please try again.")
     return next(error)
   }
   books.push(newBook)
@@ -50,7 +50,7 @@ router.put('/:id', (req, res) => {
   // editBook.title = req.body.title
   // editBook.writer = req.body.writer
   req.book.title = req.body.title
-  req.book.writer = req.body.writer
+  req.book.author = req.body.author
   res.status(200).json(req.book)
 });
 
@@ -65,7 +65,7 @@ router.delete('/:id', (req, res) => {
 
 //create placeholder error 404
 router.use((err, req, res, next) => {
-  res.status(404).send(err.message);
+  res.status(404).send({Error: err.message});
 });
 
 module.exports = router;
