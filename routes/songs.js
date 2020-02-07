@@ -3,12 +3,17 @@ const router = express.Router();
 //express router
 
 let songs = [
-  { id: 1, name: "Numb", artist: "Linkin Park" },
+//   { id: 1, name: "Numb", artist: "Linkin Park" },
   // { id: 2, name: "Rather Be", artist: "Clean Bandit" }
 ];
 
 //integrate middleware
 router.param('id', (req, res, next, id) => {
+  let song = songs.find(song => song.id === parseInt(req.params.id));
+  if (!song) {
+    const error = new Error("Impossible. Perhaps the archives are incomplete.")
+    return next(error);
+  };
     req.song = song;
     next();
 });
@@ -31,6 +36,10 @@ router.post('/', (req, res) => {
     name: req.body.name,
     artist: req.body.artist
   };
+  if (!newSong) {
+    const error = new Error('Unable to post the new song to the archives. Please try again.')
+    return next(error)
+  }
   songs.push(newSong)
   res.status(201).json(newSong) //201 = created
 });
@@ -52,6 +61,11 @@ router.delete('/:id', (req, res) => {
   let index = songs.indexOf(deleteSong);
   songs.splice(index, 1)
   res.status(200).json(deleteSong)
+});
+
+//create placeholder error
+router.use((err, req, res, next) => {
+  res.status(404).send(err.message);
 });
 
 module.exports = router;
