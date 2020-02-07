@@ -42,6 +42,16 @@ describe("routes/songs", () => {
       expect(response.body).toEqual(responseBody)
     });
   });
+
+  it("GET /songs/:id should return a 404(Not Found) error if song does not exist", () => {
+    return request(app)
+    .get("/songs/10")
+
+    .then(response => {
+      expect(response.status).toEqual(404);
+      expect(response.body).toEqual({Error:"Could not find song with ID: 10"})
+    })
+  });
   
   it("PUT /songs/:id should return the updated song", () => {
     const requestBody = { name: "Dance Monkey", artist: "Tones And I" }
@@ -57,6 +67,23 @@ describe("routes/songs", () => {
     });
   });
 
+  it("PUT /songs/:id should return a 404(Not Found) if song does not exist", () => {
+    const requestBody = { 
+      id: 10,
+      name: "GDFR",
+      artist: "Flo Rida"
+    }
+
+    return request(app)
+    .put('/songs/10')
+    .send(requestBody)
+
+    .then(response => {
+      expect(response.status).toEqual(404);
+      expect(response.body).toEqual({"Error":"Could not find song with ID: 10"})
+    });
+  });
+
   it("DELETE /songs/:id should return the deleted song", () => {
     const responseBody = { id: 1, name: "Dance Monkey", artist: "Tones And I" }
 
@@ -66,6 +93,16 @@ describe("routes/songs", () => {
     .then(response => {
       expect(response.status).toEqual(200);
       expect(response.body).toEqual(responseBody)
+    });
+  });
+
+  it("DELETE /songs/:id should return 404(Not Found) if the song does not exist", () => {
+    return request(app)
+    .delete('/songs/10')
+
+    .then(response => {
+      expect(response.status).toEqual(404);
+      expect(response.body).toEqual({"Error":"Could not find song with ID: 10"})
     });
   });
   
