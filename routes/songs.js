@@ -1,62 +1,71 @@
 const express = require('express');
 const router = express.Router();
+//express router
 
-let songs = [];
+let songs = [
+//   { id: 1, name: "Numb", artist: "Linkin Park" },
+  // { id: 2, name: "Rather Be", artist: "Clean Bandit" }
+];
 
-//Song API
+//integrate middleware
 router.param('id', (req, res, next, id) => {
-    let song = songs.find(song => song.id === parseInt(id));
-    if(!song){
-        const error = new Error(`Unable to find song with id: ${id}`);
-        error.statusCode = 404;
-        return next(error)
-    }
+  let song = songs.find(song => song.id === parseInt(req.params.id));
+  if (!song) {
+    const error = new Error("Impossible. Perhaps the archives are incomplete.")
+    return next(error);
+  };
     req.song = song;
     next();
 });
 
 //return list of all songs
-router.get('/', (req, res, next) => {
-    res.status(200).json(songs);
+router.get('/', (req, res) => {
+  res.status(200).json(songs) //200 = okay
+});
+
+//return a song with id 
+router.get('/:id', (req, res) => {
+  // let findSong = songs.find(song => song.id == parseInt(req.params.id));
+  res.status(200).json(req.song)
 });
 
 //create a new song, and return new song
 router.post('/', (req, res) => {
-    if(!req.body){
-        return next(new Error("Unable to create song"))
-    }
-
-    let newSong = {
-        id: songs.length + 1,
-        name: req.body.name,
-        artist: req.body.artist 
-    }
-    songs.push(newSong);
-    res.status(201).json(newSong);
+  let newSong = {
+    id: songs.length + 1,
+    name: req.body.name,
+    artist: req.body.artist
+  };
+  if (!newSong) {
+    const error = new Error('Unable to post the new song to the archives. Please try again.')
+    return next(error)
+  }
+  songs.push(newSong)
+  res.status(201).json(newSong) //201 = created
 });
 
-//return a song with id 
-router.get('/:id', (req, res, next) => {
-    res.status(200).json(req.song);
-});
-
-//update a song with id, and return edited song
-router.put('/:id', (req, res, next) => {
-    req.song.name = req.body.name;
-    req.song.artist = req.body.artist;
-    res.status(200).json(req.song);
+//edit a song with id, and return edited song
+router.put('/:id', (req, res) => {
+  // let editSong = songs.find(song => song.id === parseInt(req.params.id));
+  // editSong.name = req.body.name;
+  // editSong.artist = req.body.artist;
+  req.song.name = req.body.name;
+  req.song.artist = req.body.artist;
+  res.status(200).json(req.song)
 });
 
 //delete a song with id, and return deleted song
-router.delete("/:id", (req, res, next) => {
-    let index = songs.indexOf(req.song);
-    songs.splice(index, 1);
-    res.status(200).json(req.song);
+router.delete('/:id', (req, res) => {
+  // let deleteSong = songs.find(song => song.id === parseInt(req.params.id));
+  let deleteSong = req.song
+  let index = songs.indexOf(deleteSong);
+  songs.splice(index, 1)
+  res.status(200).json(deleteSong)
 });
 
-//Add error handler for songs router to return 404 on failure at any route
+//create placeholder error
 router.use((err, req, res, next) => {
-    res.status(404).json({ message: err.message });
+  res.status(404).send(err.message);
 });
 
 module.exports = router;

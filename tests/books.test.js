@@ -1,15 +1,14 @@
 const app = require("../app");
 const request = require("supertest");
 
-//Fill in the test case below for the Songs API
-
-describe("routes/songs", () => {
-  it("POST /songs should return a new song object", () => {
-    const requestBody = { name: "Numb", artist: "Linkin Park" };
-    const responseBody = { id: 1, name: "Numb", artist: "Linkin Park" };
+describe("routes/books", () => {
+  
+  it("POST /books should return a new book object", () => {
+    const requestBody = { title: "ABC", writer: "DEF" };
+    const responseBody = { id: 1, title: "ABC", writer: "DEF" };
 
     return request(app)
-    .post("/songs")
+    .post("/books")
     .send(requestBody)
 
     .then(response => {
@@ -18,13 +17,13 @@ describe("routes/songs", () => {
     });
   });
   
-  it("GET /songs should return an array with a song", () => {
+  it("GET /books should return an array with a book", () => {
     const responseBody = [
-      { id:1, name: "Numb", artist: "Linkin Park" }
+      { id:1, title: "ABC", writer: "DEF" }
     ];
 
     return request(app)
-    .get("/songs")
+    .get("/books")
 
     .then(response => {
       expect(response.status).toEqual(200);
@@ -32,11 +31,11 @@ describe("routes/songs", () => {
     });
   });
 
-  it("GET /songs/:id should return song with id specified", () => {
-    const responseBody = { id: 1, name: "Numb", artist: "Linkin Park" }
+  it("GET /books/:id should return book with id specified", () => {
+    const responseBody = { id: 1, title: "ABC", writer: "DEF" }
 
     return request(app)
-    .get('/songs/1')
+    .get('/books/1')
 
     .then(response => {
       expect(response.status).toEqual(200);
@@ -44,12 +43,12 @@ describe("routes/songs", () => {
     });
   });
   
-  it("PUT /songs/:id should return the updated song", () => {
-    const requestBody = { name: "Dance Monkey", artist: "Tones And I" }
-    const responseBody = { id: 1, name: "Dance Monkey", artist: "Tones And I" }
+  it("PUT /books/:id should return the updated book", () => {
+    const requestBody = { title: "GHI", writer: "JKL" }
+    const responseBody = { id: 1, title: "GHI", writer: "JKL" }
 
     return request(app)
-    .put('/songs/1')
+    .put('/books/1')
     .send(requestBody)
 
     .then(response => {
@@ -58,11 +57,11 @@ describe("routes/songs", () => {
     });
   });
 
-  it("DELETE /songs/:id should return the deleted song", () => {
-    const responseBody = { id: 1, name: "Dance Monkey", artist: "Tones And I" }
+  it("DELETE /books/:id should return the deleted book", () => {
+    const responseBody = { id: 1, title: "GHI", writer: "JKL" }
 
     return request(app)
-    .delete('/songs/1')
+    .delete('/books/1')
 
     .then(response => {
       expect(response.status).toEqual(200);
@@ -70,17 +69,16 @@ describe("routes/songs", () => {
     });
   });
   
-  it("GET /songs should return an empty array", () => {
+  it("GET /books should return an empty array", () => {
     const responseBody = []
     
     return request(app)
-    .get('/songs')
+    .get('/books')
 
     .then(response => {
       expect(response.status).toEqual(200);
       expect(response.body).toEqual(responseBody)
     });
-  });
+  }); 
 
 });
-
