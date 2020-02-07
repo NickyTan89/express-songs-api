@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
 
-const songRouter = require("./routes/songs");
-const movieRouter = require("./routes/movies");
+const songsRouter = require("./routes/songs");
+const booksRouter = require("./routes/books");
 
 app.use(express.json())
 
-app.use('/songs', songRouter);
-app.use('/movies', movieRouter);
+//Building Route
+app.use("/songs", songsRouter)
+app.use("/books", booksRouter)
 
 module.exports = app
